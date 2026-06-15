@@ -1,0 +1,13 @@
+{
+  "name": "nocteam-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NocTeam marketing funnel + AI onboarding conversation (static site + FMCSA serverless proxy).",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>NocTeam — Leads & KPIs</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet" />
+<style>
+  :root{--ink:#15110C;--paper:#F4EEE3;--card:#FBF7EF;--bronze:#C0824B;--bronze-deep:#A4683A;--teal:#356E72;--text:#211B13;--muted:#6E6253;--line:rgba(33,27,19,.12)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--text);line-height:1.5;padding:0}
+  .mono{font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em}
+  .bar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid var(--line);background:var(--card)}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:19px}
+  .brand .c{width:13px;height:13px;border-radius:50%;background:var(--bronze);box-shadow:inset -4px -1px 0 0 var(--ink);transform:rotate(-22deg)}
+  .brand .t{color:var(--bronze)}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px}
+  /* gate */
+  .gate{max-width:380px;margin:14vh auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:34px;text-align:center;box-shadow:0 24px 60px rgba(21,17,12,.12)}
+  .gate h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:32px;margin-bottom:6px}
+  .gate p{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .gate input{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:15px;background:var(--paper);margin-bottom:12px}
+  .gate input:focus{outline:none;border-color:var(--bronze);box-shadow:0 0 0 3px rgba(192,130,75,.16)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;border-radius:999px;padding:13px 22px;border:0;background:var(--bronze);color:#19120B;cursor:pointer;width:100%}
+  .btn:hover{background:var(--bronze-deep);color:#fff}
+  .btn.sm{width:auto;padding:9px 16px;font-size:13px}
+  .err{color:#b4452f;font-size:13px;margin-top:8px;min-height:16px}
+  /* kpis */
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:6px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .kpi .n{font-family:'Instrument Serif',serif;font-size:40px;line-height:1;color:var(--ink)}
+  .kpi .l{font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:.1em}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .panel h3{font-size:13px;color:var(--muted);letter-spacing:.12em;margin-bottom:14px}
+  .barrow{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:13.5px}
+  .barrow .lab{width:185px;flex:none;color:var(--text)}
+  .barrow .track{flex:1;height:9px;background:var(--paper);border-radius:6px;overflow:hidden}
+  .barrow .fill{height:100%;background:var(--bronze)}
+  .barrow .v{width:30px;text-align:right;color:var(--muted);font-family:'DM Mono',monospace;font-size:12px}
+  table{width:100%;border-collapse:collapse;margin-top:24px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:13.5px}
+  th{background:var(--ink);color:#fff;text-align:left;padding:11px 12px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+  td{padding:11px 12px;border-top:1px solid var(--line);vertical-align:top}
+  tr:hover td{background:#fff}
+  .pill{display:inline-block;font-family:'DM Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;padding:3px 8px;border-radius:6px;background:var(--paper);border:1px solid var(--line)}
+  .pill.ok{color:var(--teal);border-color:rgba(53,110,114,.4)}
+  .pill.book{color:#fff;background:var(--bronze);border-color:var(--bronze)}
+  a.mail{color:var(--bronze-deep)}
+  .muted{color:var(--muted)}.hide{display:none}
+  .note{background:#FFF6E6;border:1px solid #E9D2A6;border-radius:12px;padding:16px;margin-top:20px;font-size:14px;color:#6b5a32}
+  @media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.barrow .lab{width:130px}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="brand"><span class="c"></span>Noc<span class="t">Team</span> &nbsp;<span class="mono" style="font-size:11px;color:var(--muted)">· Leads & KPIs</span></div>
+  <div id="topActions" class="hide"><button class="btn sm" id="refresh">↻ Refresh</button> <button class="btn sm" id="logout" style="background:transparent;color:var(--muted);border:1px solid var(--line)">Sign out</button></div>
+</div>
+
+<!-- gate -->
+<div id="gate" class="gate">
+  <h1>Dashboard</h1>
+  <p>Enter the admin password to view leads and conversation KPIs.</p>
+  <input id="pw" type="password" placeholder="Admin password" />
+  <button class="btn" id="enter">View dashboard</button>
+  <div class="err" id="err"></div>
+</div>
+
+<!-- dashboard -->
+<div id="dash" class="wrap hide"></div>
+
+<script>
+  const PAIN_LABELS={paid:'Getting paid',backoffice:'Paperwork / back office',loads:'Finding loads',fuel:'Fuel costs',brokers:'Brokers',breakdowns:'Breakdowns',numbers:'Real numbers',drivers:'Drivers',fraud:'Fraud / double-broker',compliance:'Compliance'};
+  const $=id=>document.getElementById(id);
+  const fmtDur=s=>!s?'—':(s>=60?Math.floor(s/60)+'m '+(s%60)+'s':s+'s');
+  const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const when=t=>{if(!t)return'—';const d=new Date(t),n=new Date();const mins=Math.round((n-d)/60000);if(mins<60)return mins+'m ago';if(mins<1440)return Math.round(mins/60)+'h ago';return d.toLocaleDateString();};
+
+  function bars(counts,total){
+    const ent=Object.entries(counts||{}).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    if(!ent.length)return '<p class="muted" style="font-size:13px">No data yet.</p>';
+    const max=Math.max(...ent.map(e=>e[1]));
+    return ent.map(([k,v])=>`<div class="barrow"><div class="lab">${esc(PAIN_LABELS[k]||k)}</div><div class="track"><div class="fill" style="width:${Math.round(v/max*100)}%"></div></div><div class="v">${v}</div></div>`).join('');
+  }
+
+  function render(d){
+    if(!d.configured){
+      $('dash').innerHTML=`<div class="note"><b>Supabase isn't connected yet.</b> The dashboard will fill up once you create a Supabase project, run <code>supabase_schema.sql</code>, and set <code>SUPABASE_URL</code> + <code>SUPABASE_SERVICE_ROLE_KEY</code> in Vercel. Until then, leads still log to the browser console and Calendly captures every booking. See the README.</div>`;
+      return;
+    }
+    const k=d.kpis;
+    const kpis=`<div class="kpis">
+      <div class="kpi"><div class="n">${k.total||0}</div><div class="l mono">Conversations</div></div>
+      <div class="kpi"><div class="n">${k.completed||0}</div><div class="l mono">Completed</div></div>
+      <div class="kpi"><div class="n">${k.withContact||0}</div><div class="l mono">With contact info</div></div>
+      <div class="kpi"><div class="n">${k.booked||0}</div><div class="l mono">Booked calls</div></div>
+      <div class="kpi"><div class="n">${fmtDur(k.avgSeconds)}</div><div class="l mono">Avg length</div></div>
+    </div>`;
+    const panels=`<div class="grid2">
+      <div class="panel"><h3 class="mono">Top pain points (all mentions)</h3>${bars(d.painCounts)}</div>
+      <div class="panel"><h3 class="mono">#1 thing to fix</h3>${bars(d.top1Counts)}</div>
+    </div>
+    <div class="panel" style="margin-top:18px"><h3 class="mono">Where visitors come from</h3>${bars(d.sources)}</div>`;
+    const rows=(d.leads||[]).map(L=>{
+      const car=L.carrier?`${esc(L.carrier.legalName||'')}${L.carrier.powerUnits!=null?' · '+L.carrier.powerUnits+' units':''}`:'';
+      return `<tr>
+        <td><b>${esc(L.name||'—')}</b><div class="muted">${when(L.updated_at)}</div></td>
+        <td>${esc(L.company||'—')}${car?`<div class="muted" style="font-size:12px">${car}</div>`:''}${L.mc?`<div class="muted" style="font-size:12px">MC/DOT ${esc(L.mc)}</div>`:''}</td>
+        <td>${L.phone?`<a class="mail" href="tel:${esc(L.phone)}">${esc(L.phone)}</a>`:'<span class="muted">—</span>'}${L.email?`<div><a class="mail" href="mailto:${esc(L.email)}">${esc(L.email)}</a></div>`:''}</td>
+        <td>${esc(L.fleet||'—')}<div class="muted" style="font-size:12px">${esc(L.freight||'')}</div></td>
+        <td>${L.top1?`<span class="pill">${esc(PAIN_LABELS[L.top1]||L.top1)}</span>`:'—'}<div class="muted" style="font-size:12px;margin-top:4px">${esc((L.words||'').slice(0,80))}</div></td>
+        <td>${L.booked?'<span class="pill book">Booked</span>':(L.completed?'<span class="pill ok">Completed</span>':'<span class="pill">Started</span>')}</td>
+      </tr>`;}).join('');
+    const table=`<table><thead><tr><th>Name</th><th>Company</th><th>Contact</th><th>Fleet</th><th>#1 pain / notes</th><th>Status</th></tr></thead><tbody>${rows||'<tr><td colspan="6" class="muted" style="padding:24px;text-align:center">No leads yet.</td></tr>'}</tbody></table>`;
+    $('dash').innerHTML=kpis+panels+`<h3 class="mono" style="margin:28px 0 0;color:var(--muted)">Recent leads (call them!)</h3>`+table;
+  }
+
+  async function load(){
+    const key=sessionStorage.getItem('nt_admin');
+    if(!key)return;
+    try{
+      const r=await fetch('/api/stats?key='+encodeURIComponent(key));
+      if(r.status===401){fail('Wrong password.');return;}
+      const d=await r.json();
+      if(!d.ok){fail(d.error||'Could not load.');return;}
+      $('gate').classList.add('hide');$('dash').classList.remove('hide');$('topActions').classList.remove('hide');
+      render(d);
+    }catch(e){fail('Network error.');}
+  }
+  function fail(m){sessionStorage.removeItem('nt_admin');$('gate').classList.remove('hide');$('dash').classList.add('hide');$('topActions').classList.add('hide');$('err').textContent=m;}
+  $('enter').onclick=()=>{const v=$('pw').value.trim();if(!v)return;sessionStorage.setItem('nt_admin',v);$('err').textContent='';load();};
+  $('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('enter').click();});
+  $('refresh')&&($('refresh').onclick=load);
+  $('logout')&&($('logout').onclick=()=>{sessionStorage.removeItem('nt_admin');location.reload();});
+  load();
+</script>
+</body>
+</html>
