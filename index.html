@@ -468,8 +468,12 @@
 
   async function lookup(num){
     await paint(head('FMCSA lookup','Pulling your authority…','<span class="typing-line"><i></i><i></i><i></i></span>'));
-    try{const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),9000);
-      const r=await fetch(`${CARRIER}?q=${encodeURIComponent(num)}`,{signal:ctrl.signal});clearTimeout(to);const j=await r.json();
+    const raw=String(num),digits=raw.replace(/[^0-9]/g,'');
+    const tryF=async(qs)=>{try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),9000);const r=await fetch(`${CARRIER}?${qs}`,{signal:ac.signal});clearTimeout(to);return await r.json();}catch(e){return null;}};
+    try{let j=null;
+      if(/dot/i.test(raw)) j=await tryF('dot='+encodeURIComponent(digits));            // "USDOT 123"
+      else if(/mc/i.test(raw)) j=await tryF('q='+encodeURIComponent(digits));           // "MC 123" -> docket
+      else { j=await tryF('dot='+encodeURIComponent(digits)); if(!(j&&j.ok)) j=await tryF('q='+encodeURIComponent(digits)); } // bare -> DOT first
       if(j&&j.ok&&j.carrier){const c=j.carrier;A.carrier=c;if(c.legalName){A.company=c.legalName;gotCompany=true;}if(c.powerUnits!=null){A.fleet=fleetBucket(c.powerUnits);gotFleet=true;}
         const active=c.allowedToOperate==='Y';
         await paint(head('Found you','That\'s you, right?')+`<div class="carrier-reveal"><b>${c.legalName||''}</b>${c.dba?` <span style="color:var(--muted)">(${c.dba})</span>`:''}<div class="row">${c.city?`<span>${c.city}${c.state?', '+c.state:''}</span>`:''}${c.powerUnits!=null?`<span>${c.powerUnits} power units</span>`:''}${c.drivers!=null?`<span>${c.drivers} drivers</span>`:''}<span class="${active?'ok':''}">Authority: ${active?'Active':(c.allowedToOperate||'—')}</span></div></div>`);
